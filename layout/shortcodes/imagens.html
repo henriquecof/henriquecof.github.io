@@ -1,0 +1,13 @@
+<!-- Get src param from shortcode -->
+{{ $src := $.Get "src"}} {{ $image := .Page.Resources.GetMatch (.Get "src") }}
+{{ $file := path.Join (path.Dir .Page.File.Path) $image }} {{ $stat := os.Stat
+$file }}
+
+<!-- Get alt param from shortcode -->
+{{ $alt := $.Get "alt"}} {{- /* This shortcode create img tag with lazy loading
+Params: - "src" : relative path of image in directory "static/images/" */ -}}
+{{- with .Get "src" }} {{- $src := . }} {{ with (imageConfig (printf "images/%s"
+. )) }} <img class="img-fluid" src="{{ printf " /images/%s" $src | absURL }}"
+alt="{{ $alt }}" width="{{.Width}}" height="{{.Height}}" loading="lazy"
+decoding="async"> {{ end }} {{- else }} {{- errorf "missing value for param
+'name': %s" .Position }} {{- end }}
