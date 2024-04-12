@@ -25,3 +25,9 @@ min_version = "0.123.0"
 [author]
 name = "Jimmy Cai"
 homepage = "https://jimmycai.com"
+
+
+[module]
+  [[module.imports]]
+    path = 'github.com/hugomods/images'
+    disable = false
