@@ -12,5 +12,6 @@ Versões do SQL até os dias de hoje
 
  Abaixo segue um pequeno infográfico das versões do SQL Server, extraído do site [SQLServerBuilds](https://sqlserverbuilds.blogspot.com/)
 
-![Infográfico](Microsoft%20SQL%20Server%20Versions%20List.png)
+![Infográfico][version]
 
+[version]: Microsoft%20SQL%20Server%20Versions%20List.png
