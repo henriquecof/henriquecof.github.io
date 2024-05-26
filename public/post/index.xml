@@ -7,7 +7,69 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Thu, 11 Apr 2024 21:27:11 -0300</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 12 May 2024 21:25:38 -0300</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Select</title>
+        <link>http://localhost:1313/p/select/</link>
+        <pubDate>Sun, 12 May 2024 21:25:38 -0300</pubDate>
+        
+        <guid>http://localhost:1313/p/select/</guid>
+        <description>&lt;p&gt;Teste select&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Update</title>
+        <link>http://localhost:1313/p/update/</link>
+        <pubDate>Sun, 12 May 2024 21:25:38 -0300</pubDate>
+        
+        <guid>http://localhost:1313/p/update/</guid>
+        <description>&lt;p&gt;Teste de update.&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Insert</title>
+        <link>http://localhost:1313/p/insert/</link>
+        <pubDate>Sun, 12 May 2024 21:19:00 -0300</pubDate>
+        
+        <guid>http://localhost:1313/p/insert/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Delete</title>
+        <link>http://localhost:1313/p/delete/</link>
+        <pubDate>Sun, 12 May 2024 21:17:17 -0300</pubDate>
+        
+        <guid>http://localhost:1313/p/delete/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>SQL Server Basico</title>
+        <link>http://localhost:1313/p/sql-server-basico/</link>
+        <pubDate>Thu, 11 Apr 2024 21:27:11 -0300</pubDate>
+        
+        <guid>http://localhost:1313/p/sql-server-basico/</guid>
+        <description>&lt;p&gt;Oi pessoal tudo bom? Nessa postagem iremos falar sobre os comandos básicos de T-SQL.
+Iremos iniciar uma série explicando os principais comandos usudos na T-SQL.
+Os tópicos serão separados abaixo, cada uma em postagens diferentes, para melhor organização.&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;http://localhost:1313/p/select/&#34;  title=&#34;Select&#34;
+    &gt;Select&lt;/a&gt; &lt;br /&gt;
+&lt;a class=&#34;link&#34; href=&#34;http://localhost:1313/p/update/&#34;  title=&#34;Update&#34;
+    &gt;Update&lt;/a&gt; &lt;br /&gt;
+&lt;a class=&#34;link&#34; href=&#34;http://localhost:1313/p/insert/&#34;  title=&#34;Insert&#34;
+    &gt;Insert&lt;/a&gt; &lt;br /&gt;
+&lt;a class=&#34;link&#34; href=&#34;http://localhost:1313/p/delete/&#34;  title=&#34;Delete&#34;
+    &gt;Delete&lt;/a&gt; &lt;br /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/listversion.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Infográfico&#34;
+	
+	
+&gt;&lt;/p&gt;</description>
+        </item>
+        <item>
         <title>Versões do SQL Server</title>
         <link>http://localhost:1313/p/vers%C3%B5es-do-sql-server/</link>
         <pubDate>Thu, 11 Apr 2024 21:27:11 -0300</pubDate>

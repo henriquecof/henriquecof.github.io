@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2024-04-11T21:27:11-03:00</lastmod>
+    <lastmod>2024-05-12T21:25:38-03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -21,7 +21,7 @@
                 />
   </url><url>
     <loc>http://localhost:1313/post/</loc>
-    <lastmod>2024-04-11T21:27:11-03:00</lastmod>
+    <lastmod>2024-05-12T21:25:38-03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
@@ -37,6 +37,21 @@
                 hreflang="en"
                 href="http://localhost:1313/post/"
                 />
+  </url><url>
+    <loc>http://localhost:1313/p/select/</loc>
+    <lastmod>2024-05-12T21:25:38-03:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/p/update/</loc>
+    <lastmod>2024-05-12T21:25:38-03:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/p/insert/</loc>
+    <lastmod>2024-05-12T21:19:00-03:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/p/delete/</loc>
+    <lastmod>2024-05-12T21:17:17-03:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/p/sql-server-basico/</loc>
+    <lastmod>2024-04-11T21:27:11-03:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/p/vers%C3%B5es-do-sql-server/</loc>
     <lastmod>2024-04-11T21:27:11-03:00</lastmod>
