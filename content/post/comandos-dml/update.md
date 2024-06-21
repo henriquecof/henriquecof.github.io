@@ -5,5 +5,5 @@ draft = false
 +++
 
 
-Teste de update. Nadas mais 1. Nanas
+Teste de update. Nadas mais 1.
 Outro teste e final de hoje
