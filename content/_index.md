@@ -1,7 +1,7 @@
 ---
 menu:
   main:
-    name: Página Inicial
+    name: Home
     params:
       icon: home
     weight: -100
