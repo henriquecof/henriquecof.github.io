@@ -74,7 +74,7 @@ favicon = "/favicon.ico"
 
   [params.comments]
   enabled = true
-  provider = "disqus"
+  provider = "remark42"
 
     [params.comments.disqusjs]
 
