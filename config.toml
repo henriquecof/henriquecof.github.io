@@ -33,7 +33,7 @@ weight = 3
   description = "وصف تجريبي"
 
 [services.disqus]
-shortname = "hugo-theme-stack"
+shortname = "alencarinosql"
 
 [services.googleAnalytics]
 
