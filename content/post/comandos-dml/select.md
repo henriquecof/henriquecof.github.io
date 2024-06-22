@@ -1,8 +1,7 @@
----
-title: "GitHub comments for a Hugo-based blog"
-date: 2019-04-19T12:57:21+02:00
-tags: [hugo, web]
-# GHissueID: 1
----
++++
+title = 'Select'
+date = 2024-05-12T21:25:38-03:00
+draft = false
++++
 
 Teste select nanas novo site babas

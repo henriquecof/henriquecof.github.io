@@ -8,7 +8,7 @@
         <language>en</language>
         <copyright>Example Person</copyright>
         <lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/page/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Archives</title>
+        <title>Arquivos</title>
         <link>http://localhost:1313/archives/</link>
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
         
@@ -16,11 +16,11 @@
         <description></description>
         </item>
         <item>
-        <title>About</title>
-        <link>http://localhost:1313/about/</link>
+        <title>Sobre</title>
+        <link>http://localhost:1313/sobre/</link>
         <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/about/</guid>
+        <guid>http://localhost:1313/sobre/</guid>
         <description>&lt;p&gt;Prazer, tudo bom? Meu nome é Henrique Almeida. Natural de Fortaleza, Ceará.
 Nas linhas abaixo, espero contar um pouco sobre minha história, comecei minha carreira muito cedo, sempre trabalhando com meu pai,
 como auxiliar de mecânico, praticamente dos meus 10 anos até pouco mais 23 anos. Com muitas dificuldades e sempre buscando novos conhecimentos,
@@ -28,6 +28,14 @@ sai da área de automoveis e entrei em outro ramo, no Telemarketing.
 Passei pouco mais de 5 anos e em 2011 entrei na área da informática, trabalhando em uma software-house no setor de suporte.
 Passei 6 anos trabalhando com suporte, depois passei a trabalhar com implantação de sistema e em 2020 entrei de cabeça na área de banco de dados.&lt;/p&gt;
 </description>
+        </item>
+        <item>
+        <title>Buscar</title>
+        <link>http://localhost:1313/search/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/search/</guid>
+        <description></description>
         </item>
         <item>
         <title>Links</title>
@@ -63,14 +71,6 @@ Passei 6 anos trabalhando com suporte, depois passei a trabalhar com implantaç�
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;code&gt;image&lt;/code&gt; field accepts both local and external images.&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title>Search</title>
-        <link>http://localhost:1313/search/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/search/</guid>
-        <description></description>
         </item>
         
     </channel>
