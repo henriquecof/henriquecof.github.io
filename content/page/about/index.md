@@ -12,7 +12,7 @@ menu:
     params:
       icon: user
     weight: -90
-title: Sobre
+title: About
 ---
 
 Prazer, tudo bom? Meu nome é Henrique Almeida. Natural de Fortaleza, Ceará.

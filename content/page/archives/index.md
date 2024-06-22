@@ -7,5 +7,5 @@ menu:
       icon: archives
     weight: -70
 slug: archives
-title: Arquivos
+title: Archives
 ---

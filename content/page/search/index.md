@@ -9,5 +9,5 @@ outputs:
 - html
 - json
 slug: search
-title: Buscar
+title: Search
 ---
