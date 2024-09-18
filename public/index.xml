@@ -8,32 +8,31 @@
         <language>en</language>
         <copyright>Example Person</copyright>
         <lastBuildDate>Wed, 18 Sep 2024 02:38:22 +0000</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
-<<<<<<< HEAD
         <title>Novidades Power BI Setembro 2024</title>
         <link>http://localhost:1313/p/novidades-power-bi-setembro-2024/</link>
         <pubDate>Wed, 18 Sep 2024 02:38:22 +0000</pubDate>
         
         <guid>http://localhost:1313/p/novidades-power-bi-setembro-2024/</guid>
         <description>&lt;p&gt;O Power BI desktop recebeu uma grande atualização, onde o Modo Escuro ou &lt;em&gt;Dark Mode&lt;/em&gt; , está disponível.
-&lt;img src=&#34;http://localhost:1313/image.png&#34;
+&lt;img src=&#34;http://localhost:1313/static/img/image.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;imagem&#34;
+		alt=&#34;Configurações&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;Conforme as imagens pode-se perceber que o Power BI desktop ficou bem mais agradável para trabalhar em
 ambientes escuros.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/image-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/static/img/image-1.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;imagem1&#34;
+		alt=&#34;Desktop&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -44,8 +43,6 @@ ambientes escuros.&lt;/p&gt;
 </description>
         </item>
         <item>
-=======
->>>>>>> 9f0ad8345eb9d1770aae5ec128f4e2509a95992a
         <title>Select</title>
         <link>http://localhost:1313/p/select/</link>
         <pubDate>Sun, 12 May 2024 21:25:38 -0300</pubDate>
@@ -123,7 +120,7 @@ Os tópicos serão separados abaixo, cada uma em postagens diferentes, para melh
 &lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/vers%C3%B5es-do-sql-server/listversion.png&#34;
 	width=&#34;488&#34;
 	height=&#34;1161&#34;
-	srcset=&#34;http://localhost:1313/p/vers%C3%B5es-do-sql-server/listversion_hu7925434188997936613.png 480w, http://localhost:1313/p/vers%C3%B5es-do-sql-server/listversion_hu17356813364445920488.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/vers%C3%B5es-do-sql-server/listversion_hu3afbbb85b9d13bb674db703b39f5486f_60647_480x0_resize_box_3.png 480w, http://localhost:1313/p/vers%C3%B5es-do-sql-server/listversion_hu3afbbb85b9d13bb674db703b39f5486f_60647_1024x0_resize_box_3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Infográfico&#34;
