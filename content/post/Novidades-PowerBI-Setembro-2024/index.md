@@ -10,7 +10,7 @@ O Power BI desktop recebeu uma grande atualização, onde o Modo Escuro ou *Dark
 Conforme as imagens pode-se perceber que o Power BI desktop ficou bem mais agradável para trabalhar em
 ambientes escuros.
 
-![Desktop](image-1.png)
+![Desktop](image1.png)
 
 Mas e ai o que vocês acharam dessas novidades?
 
