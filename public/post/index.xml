@@ -7,41 +7,183 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Wed, 18 Sep 2024 02:38:22 +0000</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 22 Sep 2024 21:58:49 -0300</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Dbatools</title>
+        <link>http://localhost:1313/p/dbatools/</link>
+        <pubDate>Sun, 22 Sep 2024 21:58:49 -0300</pubDate>
+        
+        <guid>http://localhost:1313/p/dbatools/</guid>
+        <description>&lt;p&gt;No mundo atual da administração de banco de dados, a eficiência e a automação são fatores cruciais para garantir que as operações diárias sejam realizadas de maneira rápida, segura e confiável. O dbatools, uma coleção poderosa de comandos do PowerShell, foi desenvolvido com esse propósito em mente. Criado pela comunidade e para a comunidade, o dbatools é uma ferramenta indispensável para qualquer administrador de banco de dados que trabalhe com o Microsoft SQL Server.&lt;/p&gt;
+&lt;p&gt;Neste artigo, vamos explorar em profundidade o dbatools, discutindo suas principais funcionalidades, benefícios e como ele pode transformar a maneira como você gerencia seus servidores SQL. Abordaremos desde os passos iniciais de instalação e configuração, até casos de uso avançados que demonstram a flexibilidade e o poder desta ferramenta. Se você é novo no dbatools ou já utiliza alguns de seus comandos, este guia servirá como uma referência completa para maximizar o seu uso.&lt;/p&gt;
+&lt;h3 id=&#34;o-que-é-dbatools&#34;&gt;&lt;strong&gt;O que é dbatools?&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;O dbatools é uma coleção open-source de mais de 500 comandos do PowerShell projetados especificamente para administradores de banco de dados SQL Server. Desenvolvido pela comunidade SQL Server e pelo projeto dbatools.io, a ferramenta oferece uma abordagem simplificada para automatizar tarefas comuns e complexas, como migração de servidores, backup e restauração, monitoramento de performance, e muito mais.&lt;/p&gt;
+&lt;h4 id=&#34;história-e-origem&#34;&gt;&lt;strong&gt;História e Origem&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;O dbatools começou como um projeto simples para automatizar a migração de servidores SQL, criado por Chrissy LeMaire em 2014. Desde então, evoluiu significativamente, incorporando contribuições de diversos membros da comunidade e expandindo suas funcionalidades para cobrir praticamente todos os aspectos da administração de SQL Server. Hoje, o dbatools é amplamente reconhecido como uma das melhores ferramentas para administradores de SQL Server, oferecendo uma alternativa poderosa e gratuita a muitas ferramentas comerciais.&lt;/p&gt;
+&lt;h4 id=&#34;principais-funcionalidades&#34;&gt;&lt;strong&gt;Principais Funcionalidades&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Entre as principais funcionalidades do dbatools, destacam-se:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Automação de Migrações:&lt;/strong&gt; Ferramentas como Start-DbaMigration permitem migrar bancos de dados, logins, permissões e outros componentes de forma automatizada e eficiente entre instâncias de SQL Server.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backup e Restauração:&lt;/strong&gt; Com comandos como Backup-DbaDatabase e Restore-DbaDatabase, é possível automatizar processos de backup e restauração, garantindo segurança e consistência dos dados.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Monitoramento de Performance:&lt;/strong&gt; Comandos como Test-DbaLastBackup ajudam a monitorar e garantir que os backups estejam atualizados, além de identificar problemas de performance.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gerenciamento de Segurança:&lt;/strong&gt; A transferência e gerenciamento de logins e permissões se torna mais simples com o comando Copy-DbaLogin, que permite copiar logins entre instâncias de SQL Server.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;comparação-com-outras-ferramentas&#34;&gt;&lt;strong&gt;Comparação com Outras Ferramentas&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Embora existam várias ferramentas comerciais para administração de SQL Server, como o SQL Server Management Studio (SSMS) e outras soluções de monitoramento e automação, o dbatools se destaca por ser:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Gratuito e Open-Source:&lt;/strong&gt; Diferente de muitas alternativas comerciais, o dbatools é completamente gratuito e possui uma comunidade ativa que continuamente adiciona novas funcionalidades e aprimora o código.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Extensível:&lt;/strong&gt; Sendo baseado em PowerShell, o dbatools permite que os administradores criem scripts personalizados e integrem facilmente com outras ferramentas e sistemas.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fácil de Usar:&lt;/strong&gt; A curva de aprendizado para quem já está familiarizado com PowerShell é relativamente baixa, tornando o dbatools uma escolha prática e acessível.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;por-que-usar-o-dbatools&#34;&gt;&lt;strong&gt;Por que usar o dbatools?&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id=&#34;benefícios-da-automação-de-tarefas-com-o-dbatools&#34;&gt;&lt;strong&gt;Benefícios da Automação de Tarefas com o dbatools&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;A principal razão para utilizar o dbatools é a automação de tarefas repetitivas e demoradas, que consomem um tempo valioso dos administradores de banco de dados. Com o dbatools, tarefas que tradicionalmente exigiriam várias horas podem ser concluídas em minutos, liberando recursos para focar em atividades mais estratégicas e menos operacionais.&lt;/p&gt;
+&lt;p&gt;Outros benefícios incluem:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Redução de Erros:&lt;/strong&gt; A automação reduz significativamente a chance de erros humanos, que são comuns em processos manuais.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consistência:&lt;/strong&gt; Scripts bem projetados garantem que as tarefas sejam executadas da mesma forma todas as vezes, independentemente de quem as esteja realizando.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Economia de Tempo:&lt;/strong&gt; Com comandos prontos e fáceis de usar, o tempo gasto em tarefas rotineiras é drasticamente reduzido.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Escalabilidade:&lt;/strong&gt; O dbatools é capaz de gerenciar grandes ambientes de SQL Server com múltiplas instâncias e centenas de bancos de dados.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;exemplos-de-uso-comum&#34;&gt;&lt;strong&gt;Exemplos de Uso Comum&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Entre os usos mais comuns do dbatools, podemos citar:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Migração de Dados:&lt;/strong&gt; Transferir bancos de dados de um servidor para outro, incluindo logins, permissões, jobs do SQL Server Agent e outros objetos associados.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Automação de Backups:&lt;/strong&gt; Criar e agendar backups automáticos, garantindo que todos os bancos de dados estejam protegidos contra perda de dados.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Monitoramento Proativo:&lt;/strong&gt; Automatizar scripts de monitoramento que alertam sobre problemas de performance, falta de espaço em disco, ou backups atrasados.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Auditoria e Compliance:&lt;/strong&gt; Gerar relatórios automáticos de conformidade com políticas internas e externas, facilitando auditorias e revisões de segurança.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;casos-de-sucesso-na-comunidade&#34;&gt;&lt;strong&gt;Casos de Sucesso na Comunidade&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;A comunidade SQL Server tem vários exemplos de como o dbatools ajudou a resolver problemas complexos e a melhorar a eficiência operacional. Alguns casos de sucesso incluem:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Migração de ambientes inteiros em questão de horas:&lt;/strong&gt; Administradores relataram migrações que normalmente levariam dias sendo concluídas em poucas horas com a ajuda do dbatools.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Redução de erros em processos críticos:&lt;/strong&gt; Empresas que adotaram o dbatools para automação de backups e restaurações relataram uma queda significativa no número de falhas e erros de configuração.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Aumento na produtividade da equipe:&lt;/strong&gt; Com a automação das tarefas rotineiras, as equipes de DBAs puderam focar em projetos de maior valor, como a otimização de performance e o planejamento de capacidade.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;instalação-e-configuração&#34;&gt;&lt;strong&gt;Instalação e Configuração&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;A instalação do dbatools é simples e pode ser realizada diretamente do PowerShell. Aqui estão os passos básicos:&lt;/p&gt;
+&lt;h4 id=&#34;requisitos-do-sistema&#34;&gt;&lt;strong&gt;Requisitos do Sistema&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Antes de instalar o dbatools, verifique se o seu ambiente atende aos seguintes requisitos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PowerShell 5.1&lt;/strong&gt; ou superior (recomenda-se PowerShell 7)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Windows Management Framework 5.1&lt;/strong&gt; (se você estiver em um Windows mais antigo)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SQL Server Management Studio (SSMS)&lt;/strong&gt;, que facilita a integração com as ferramentas do SQL Server&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;passos-para-instalação&#34;&gt;&lt;strong&gt;Passos para Instalação&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Para instalar o dbatools, abra o PowerShell com privilégios de administrador e execute o seguinte comando:&lt;/p&gt;
+&lt;p&gt;powershell
+Install-Module dbatools -Scope CurrentUser&lt;/p&gt;
+&lt;p&gt;Este comando baixa e instala o dbatools do PowerShell Gallery. Se você preferir instalar para todos os usuários do sistema, utilize:&lt;/p&gt;
+&lt;p&gt;powershell
+Install-Module dbatools -Scope AllUsers&lt;/p&gt;
+&lt;h4 id=&#34;configuração-inicial-e&#34;&gt;**Configuração Inicial e
+&lt;/h4&gt;&lt;p&gt;Melhores Práticas**&lt;/p&gt;
+&lt;p&gt;Após a instalação, recomenda-se realizar as seguintes configurações iniciais:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Atualização dos Módulos:&lt;/strong&gt; Verifique se há atualizações disponíveis regularmente utilizando o comando Update-Module dbatools.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Verificação de Compatibilidade:&lt;/strong&gt; Execute o comando Test-DbaInstallation para verificar se o seu ambiente está corretamente configurado para utilizar o dbatools.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Documentação:&lt;/strong&gt; Familiarize-se com a documentação oficial disponível em &lt;a class=&#34;link&#34; href=&#34;https://dbatools.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;dbatools.io&lt;/a&gt; e utilize o comando Get-Help para obter informações detalhadas sobre cada comando.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Organização de Scripts:&lt;/strong&gt; Mantenha seus scripts organizados em diretórios específicos para facilitar a manutenção e reutilização.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;principais-comandos-e-funções&#34;&gt;&lt;strong&gt;Principais Comandos e Funções&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;O dbatools é vasto e oferece mais de 500 comandos. Aqui estão alguns dos comandos mais úteis e como utilizá-los:&lt;/p&gt;
+&lt;h4 id=&#34;transferência-de-bancos-de-dados-com-start-dbamigration&#34;&gt;&lt;strong&gt;Transferência de Bancos de Dados com Start-DbaMigration&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;O comando Start-DbaMigration é um dos mais poderosos, permitindo a migração completa de um servidor SQL para outro com um único comando. Ele migra bancos de dados, logins, permissões, jobs e até configurações de servidor.&lt;/p&gt;
+&lt;p&gt;powershell
+Start-DbaMigration -Source sqlserver01 -Destination sqlserver02 -BackupRestore -NetworkShare \server\share -WithReplace&lt;/p&gt;
+&lt;h4 id=&#34;backup-e-restauração-com-backup-dbadatabase-e-restore-dbadatabase&#34;&gt;&lt;strong&gt;Backup e Restauração com Backup-DbaDatabase e Restore-DbaDatabase&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Automatize seus backups utilizando Backup-DbaDatabase:&lt;/p&gt;
+&lt;p&gt;powershell
+Backup-DbaDatabase -SqlInstance sqlserver01 -Path \backup\share -Compression&lt;/p&gt;
+&lt;p&gt;E restaure facilmente com Restore-DbaDatabase:&lt;/p&gt;
+&lt;p&gt;powershell
+Restore-DbaDatabase -SqlInstance sqlserver01 -Path \backup\share -DatabaseName TestDB&lt;/p&gt;
+&lt;h4 id=&#34;monitoramento-de-performance-com-test-dbalastbackup&#34;&gt;&lt;strong&gt;Monitoramento de Performance com Test-DbaLastBackup&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Certifique-se de que seus backups estão atualizados:&lt;/p&gt;
+&lt;p&gt;powershell
+Test-DbaLastBackup -SqlInstance sqlserver01&lt;/p&gt;
+&lt;p&gt;Este comando verifica a data do último backup de cada banco de dados e alerta se algum estiver desatualizado.&lt;/p&gt;
+&lt;h4 id=&#34;gerenciamento-de-segurança-com-copy-dbalogin&#34;&gt;&lt;strong&gt;Gerenciamento de Segurança com Copy-DbaLogin&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Transfira logins entre instâncias SQL Server:&lt;/p&gt;
+&lt;p&gt;powershell
+Copy-DbaLogin -Source sqlserver01 -Destination sqlserver02 -Logins User1,User2&lt;/p&gt;
+&lt;h4 id=&#34;automação-de-manutenção-com-invoke-dbadatabaseshrink-e-invoke-dbadbcccheck&#34;&gt;&lt;strong&gt;Automação de Manutenção com Invoke-DbaDatabaseShrink e Invoke-DbaDbCCCheck&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Automatize a manutenção de bancos de dados, como a redução de tamanho e verificação de consistência:&lt;/p&gt;
+&lt;p&gt;powershell
+Invoke-DbaDatabaseShrink -SqlInstance sqlserver01 -Database TestDB
+Invoke-DbaDbCCCheck -SqlInstance sqlserver01 -Database TestDB&lt;/p&gt;
+&lt;h3 id=&#34;casos-de-uso&#34;&gt;&lt;strong&gt;Casos de Uso&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id=&#34;automação-de-backups-em-larga-escala&#34;&gt;&lt;strong&gt;Automação de Backups em Larga Escala&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Empresas que gerenciam múltiplos servidores SQL podem utilizar o dbatools para automatizar backups em larga escala, garantindo que todos os bancos de dados sejam protegidos sem a necessidade de intervenção manual.&lt;/p&gt;
+&lt;h4 id=&#34;migração-de-servidores-sql&#34;&gt;&lt;strong&gt;Migração de Servidores SQL&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;A migração de servidores SQL é uma tarefa complexa que pode ser simplificada com o dbatools, permitindo a transferência de dados e configurações de forma rápida e segura.&lt;/p&gt;
+&lt;h4 id=&#34;auditoria-e-compliance&#34;&gt;&lt;strong&gt;Auditoria e Compliance&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;O dbatools oferece comandos que ajudam a automatizar auditorias, como a verificação de permissões e geração de relatórios de compliance, facilitando a aderência a políticas de segurança.&lt;/p&gt;
+&lt;h4 id=&#34;gerenciamento-de-permissões-de-usuários&#34;&gt;&lt;strong&gt;Gerenciamento de Permissões de Usuários&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Com o dbatools, o gerenciamento de permissões de usuários pode ser centralizado e automatizado, garantindo que as permissões sejam consistentes e seguras em todo o ambiente.&lt;/p&gt;
+&lt;h3 id=&#34;melhores-práticas-com-dbatools&#34;&gt;&lt;strong&gt;Melhores Práticas com dbatools&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id=&#34;organização-de-scripts-e-módulos&#34;&gt;&lt;strong&gt;Organização de Scripts e Módulos&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Mantenha seus scripts organizados em módulos e utilize versionamento para controlar mudanças, especialmente em ambientes de produção.&lt;/p&gt;
+&lt;h4 id=&#34;integração-com-outras-ferramentas&#34;&gt;&lt;strong&gt;Integração com Outras Ferramentas&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;O dbatools pode ser integrado com outras ferramentas como SQL Server Management Studio (SSMS) e soluções de monitoramento, ampliando sua utilidade e aplicabilidade.&lt;/p&gt;
+&lt;h4 id=&#34;versionamento-e-controle-de-alterações&#34;&gt;&lt;strong&gt;Versionamento e Controle de Alterações&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Utilize sistemas de controle de versão, como Git, para manter o controle sobre as alterações feitas nos scripts do dbatools, facilitando a colaboração e a recuperação em caso de problemas.&lt;/p&gt;
+&lt;h3 id=&#34;recursos-adicionais&#34;&gt;&lt;strong&gt;Recursos Adicionais&lt;/strong&gt;
+&lt;/h3&gt;&lt;h4 id=&#34;documentação-e-tutoriais&#34;&gt;&lt;strong&gt;Documentação e Tutoriais&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;A documentação oficial do dbatools é extensa e cobre todos os comandos disponíveis. Acesse &lt;a class=&#34;link&#34; href=&#34;https://dbatools.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;dbatools.io&lt;/a&gt; para tutoriais, exemplos de uso e contribuições da comunidade.&lt;/p&gt;
+&lt;h4 id=&#34;comunidade-e-suporte&#34;&gt;&lt;strong&gt;Comunidade e Suporte&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;A comunidade dbatools é ativa e está sempre disposta a ajudar. Participe de fóruns, grupos no Slack e outras redes sociais para trocar experiências e obter suporte.&lt;/p&gt;
+&lt;h4 id=&#34;contribuições-para-o-projeto-dbatools&#34;&gt;&lt;strong&gt;Contribuições para o Projeto dbatools&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;Se você tem habilidades em PowerShell e SQL Server, considere contribuir para o projeto dbatools no GitHub. Qualquer ajuda é bem-vinda, seja para corrigir bugs, adicionar novas funcionalidades ou melhorar a documentação.&lt;/p&gt;
+&lt;h3 id=&#34;conclusão&#34;&gt;&lt;strong&gt;Conclusão&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;O dbatools é uma ferramenta poderosa e flexível que pode transformar a maneira como você gerencia seus servidores SQL. Com ele, tarefas que tradicionalmente consomem tempo e recursos podem ser automatizadas, reduzindo erros e aumentando a eficiência. Seja para migração, backups, monitoramento ou gerenciamento de segurança, o dbatools oferece uma solução robusta e acessível.&lt;/p&gt;
+&lt;p&gt;Se você ainda não experimentou o dbatools, agora é o momento ideal para começar. Instale, explore e veja como ele pode simplificar suas operações diárias. A comunidade dbatools está pronta para apoiar você em sua jornada para uma administração de banco de dados mais eficiente e eficaz.&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Novidades Power BI Setembro 2024</title>
         <link>http://localhost:1313/p/novidades-power-bi-setembro-2024/</link>
         <pubDate>Wed, 18 Sep 2024 02:38:22 +0000</pubDate>
         
         <guid>http://localhost:1313/p/novidades-power-bi-setembro-2024/</guid>
         <description>&lt;p&gt;O Power BI desktop recebeu uma grande atualização, onde o Modo Escuro ou &lt;em&gt;Dark Mode&lt;/em&gt; , está disponível.
-&lt;img src=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image1.png&#34;
-	width=&#34;1347&#34;
-	height=&#34;653&#34;
-	srcset=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image1_hu3363be19a5b845df7636ef22490d8a23_89228_480x0_resize_box_3.png 480w, http://localhost:1313/p/novidades-power-bi-setembro-2024/image1_hu3363be19a5b845df7636ef22490d8a23_89228_1024x0_resize_box_3.png 1024w&#34;
+&lt;img src=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image.png&#34;
+	width=&#34;1003&#34;
+	height=&#34;609&#34;
+	srcset=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image_hu44d93b6192caaeb5805362816715ff07_81233_480x0_resize_box_3.png 480w, http://localhost:1313/p/novidades-power-bi-setembro-2024/image_hu44d93b6192caaeb5805362816715ff07_81233_1024x0_resize_box_3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Configurações&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;206&#34;
-		data-flex-basis=&#34;495px&#34;
+		data-flex-grow=&#34;164&#34;
+		data-flex-basis=&#34;395px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;Conforme as imagens pode-se perceber que o Power BI desktop ficou bem mais agradável para trabalhar em
 ambientes escuros.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image.png&#34;
-	width=&#34;1003&#34;
-	height=&#34;609&#34;
-	srcset=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image_hu44d93b6192caaeb5805362816715ff07_81233_480x0_resize_box_3.png 480w, http://localhost:1313/p/novidades-power-bi-setembro-2024/image_hu44d93b6192caaeb5805362816715ff07_81233_1024x0_resize_box_3.png 1024w&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image1.png&#34;
+	width=&#34;1347&#34;
+	height=&#34;653&#34;
+	srcset=&#34;http://localhost:1313/p/novidades-power-bi-setembro-2024/image1_hu3363be19a5b845df7636ef22490d8a23_89228_480x0_resize_box_3.png 480w, http://localhost:1313/p/novidades-power-bi-setembro-2024/image1_hu3363be19a5b845df7636ef22490d8a23_89228_1024x0_resize_box_3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Desktop&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;164&#34;
-		data-flex-basis=&#34;395px&#34;
+		data-flex-grow=&#34;206&#34;
+		data-flex-basis=&#34;495px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;Mas e ai o que vocês acharam dessas novidades?&lt;/p&gt;
@@ -103,14 +245,18 @@ Os tópicos serão separados abaixo, cada uma em postagens diferentes, para melh
     &gt;Insert&lt;/a&gt; &lt;br /&gt;
 &lt;a class=&#34;link&#34; href=&#34;http://localhost:1313/p/delete/&#34;  title=&#34;Delete&#34;
     &gt;Delete&lt;/a&gt; &lt;br /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/listversion.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/sql-server-basico/image.png&#34;
+	width=&#34;902&#34;
+	height=&#34;338&#34;
+	srcset=&#34;http://localhost:1313/p/sql-server-basico/image_hub6831e9d6c5a9fc4f3a179d5a33785a4_17243_480x0_resize_box_3.png 480w, http://localhost:1313/p/sql-server-basico/image_hub6831e9d6c5a9fc4f3a179d5a33785a4_17243_1024x0_resize_box_3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;Infográfico&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;266&#34;
+		data-flex-basis=&#34;640px&#34;
 	
 &gt;&lt;/p&gt;</description>
         </item>

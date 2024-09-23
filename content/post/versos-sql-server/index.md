@@ -2,6 +2,7 @@
 date: "2024-04-11T21:27:11-03:00"
 draft: false
 title: Versões do SQL Server
+tags: [SQL Server]
 ---
 
 Versões do SQL até os dias de hoje
