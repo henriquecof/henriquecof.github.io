@@ -11,6 +11,7 @@ author: "Seu Nome/Especialista SQL Server"
 tags: ["SQL Server", "Linked Server", "Banco de Dados", "DBA", "T-SQL", "SSMS", "Integração de Dados"]
 categories: ["Desenvolvimento", "Administração de Banco de Dados", "SQL Server"]
 description: "Um guia completo sobre como configurar, usar e solucionar problemas de Linked Servers no SQL Server para integrar dados de diferentes fontes."
+keywords: ['sql server', 'linked server', 'database','ti']
 ---
 
 
