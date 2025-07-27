@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Segurança on Exemplo Site</title><link>https://henriquecof.github.io/tags/seguran%C3%A7a/</link><description>Recent content in Segurança on Exemplo Site</description><generator>Hugo -- gohugo.io</generator><language>pt-br</language><lastBuildDate>Sat, 26 Jul 2025 22:49:15 -0300</lastBuildDate><atom:link href="https://henriquecof.github.io/tags/seguran%C3%A7a/index.xml" rel="self" type="application/rss+xml"/><item><title>Logins SQL Server</title><link>https://henriquecof.github.io/p/logins-sql-server/</link><pubDate>Sat, 26 Jul 2025 22:49:15 -0300</pubDate><guid>https://henriquecof.github.io/p/logins-sql-server/</guid><description>&lt;img src="https://henriquecof.github.io/LoginsSQLServer.jpg" alt="Featured image of post Logins SQL Server" />&lt;h1 id="configuração-de-logins-no-sql-server">Configuração de Logins no SQL Server
+&lt;/h1>&lt;h2 id="introdução">Introdução
+&lt;/h2>&lt;p>A configuração de logins no SQL Server é uma das tarefas essenciais para garantir que o acesso ao banco de dados seja controlado adequadamente. Existem dois tipos principais de logins no SQL Server: logins do SQL Server e logins do Windows. Neste post, vamos explorar como configurar ambos os tipos de logins e discutir práticas recomendadas para gerenciar o acesso de usuários.&lt;/p>
+&lt;h2 id="1-criando-logins-no-sql-server">1. Criando Logins no SQL Server
+&lt;/h2>&lt;p>No SQL Server, você pode criar logins através do Management Studio ou via T-SQL. Vamos começar com um exemplo básico de como criar um login de SQL Server:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">WITH&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PASSWORD&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;SenhaSegura123&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Este comando cria um login com o nome &lt;code>NovoUsuario&lt;/code> e uma senha associada. Após a criação, você precisa conceder permissões para esse login. Isso é feito associando-o a uma conta de usuário dentro de um banco de dados específico.&lt;/p>
+&lt;h3 id="exemplo-de-criação-de-login-com-configuração-de-senha-expirada">Exemplo de criação de login com configuração de senha expirada:
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">WITH&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PASSWORD&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;SenhaSegura123&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">CHECK_POLICY&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">CHECK_EXPIRATION&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Neste exemplo, a política de senha e a expiração de senha são habilitadas, forçando o usuário a alterar a senha após o prazo determinado.&lt;/p>
+&lt;h2 id="2-criando-logins-do-windows">2. Criando Logins do Windows
+&lt;/h2>&lt;p>Você também pode criar logins baseados no Windows, permitindo que os usuários acessem o banco de dados utilizando suas credenciais do sistema operacional:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">WINDOWS&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Neste caso, o login é criado utilizando a conta do Windows &lt;code>DOMINIO\Usuario&lt;/code>.&lt;/p>
+&lt;h3 id="logins-do-windows-vs-sql-server">Logins do Windows vs SQL Server
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Logins do SQL Server&lt;/strong>: São úteis em cenários onde os usuários não fazem parte de um domínio ou quando você precisa de autenticação exclusiva no SQL Server.&lt;/li>
+&lt;li>&lt;strong>Logins do Windows&lt;/strong>: São recomendados quando a segurança do domínio e a administração de contas de usuários já estão sendo feitas no nível do sistema operacional.&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-associando-logins-aos-bancos-de-dados">3. Associando Logins aos Bancos de Dados
+&lt;/h2>&lt;p>Depois de criar o login, o próximo passo é associá-lo a um banco de dados. Isso é feito criando um usuário no banco de dados para o login:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="n">USE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MeuBancoDeDados&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">USER&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FOR&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>O comando acima cria um usuário no banco de dados &lt;code>MeuBancoDeDados&lt;/code> associado ao login &lt;code>NovoUsuario&lt;/code>.&lt;/p>
+&lt;h3 id="exemplo-de-associação-de-login-do-windows">Exemplo de associação de login do Windows:
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="n">USE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MeuBancoDeDados&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">USER&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FOR&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">];&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="4-concedendo-permissões">4. Concedendo Permissões
+&lt;/h2>&lt;p>Após associar o login ao banco de dados, você deve conceder as permissões necessárias. Por exemplo, para conceder permissões de leitura e gravação:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">GRANT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">INSERT&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">UPDATE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">DELETE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">SCHEMA&lt;/span>&lt;span class="p">::&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">TO&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Isso permite que o usuário &lt;code>NovoUsuario&lt;/code> tenha permissões de leitura e escrita em todas as tabelas dentro do esquema &lt;code>dbo&lt;/code>.&lt;/p>
+&lt;h3 id="exemplo-de-concessão-de-permissões-a-logins-de-windows">Exemplo de concessão de permissões a logins de Windows:
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">GRANT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">EXECUTE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">SCHEMA&lt;/span>&lt;span class="p">::&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">TO&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">];&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Neste caso, o login do Windows &lt;code>[DOMINIO\Usuario]&lt;/code> recebe permissão para executar stored procedures no esquema &lt;code>dbo&lt;/code>.&lt;/p>
+&lt;h2 id="5-considerações-de-segurança">5. Considerações de Segurança
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>Senhas fortes&lt;/strong>: Sempre utilize senhas fortes para logins do SQL Server. Senhas fracas são um dos principais vetores de ataque.&lt;/li>
+&lt;li>&lt;strong>Privilégios mínimos&lt;/strong>: Evite usar logins com permissões administrativas, a menos que absolutamente necessário. Utilize o princípio do &amp;ldquo;menor privilégio&amp;rdquo;.&lt;/li>
+&lt;li>&lt;strong>Logins do Windows&lt;/strong>: Sempre que possível, use logins do Windows, pois eles aproveitam a segurança e os controles de autenticação do sistema operacional.&lt;/li>
+&lt;li>&lt;strong>Auditoria&lt;/strong>: É importante configurar auditoria de segurança para monitorar atividades de logins, como tentativas de login falhas e logins com privilégios elevados.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://henriquecof.github.io/LoginsSQLServer.jpg"
+loading="lazy"
+alt="Configuração Logins SQL Server"
+>&lt;/p>
+&lt;h2 id="conclusão">Conclusão
+&lt;/h2>&lt;p>A configuração de logins no SQL Server é uma tarefa fundamental para garantir a segurança e o controle de acesso aos dados. Ao criar logins adequados e aplicar as melhores práticas de segurança, como senhas fortes e permissões mínimas, você estará protegendo seu ambiente de banco de dados contra acessos não autorizados. Além disso, é importante revisar regularmente as permissões e garantir que os logins sejam mantidos atualizados e em conformidade com as políticas de segurança da organização.&lt;/p></description></item></channel></rss>
