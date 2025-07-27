@@ -3,7 +3,9 @@ baseurl = "https://henriquecof.github.io/"
 languageCode = "pt-br"
 title = "Hugo Theme Stack Starter"
 
-googleAnalytics = "G-3FZEY4WTFJ"
+[services]
+  [services.googleAnalytics]
+    id = "G-3FZEY4WTFJ"
 
 # Theme i18n support
 # Available values: en, fr, id, ja, ko, pt-br, zh-cn, zh-tw, es, de, nl, it, th, el, uk, ar
