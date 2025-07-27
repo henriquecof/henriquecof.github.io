@@ -1,8 +1,10 @@
 ---
 title: "Logins SQL Server"
 description: 
+slug: "Logins SQL Server"
 date: 2025-07-26T22:49:15-03:00
-image: 1.jpg
+image: LoginsSQLServer.jpg
+translationKey: 'about'
 math: 
 license: 
 hidden: false
@@ -105,10 +107,9 @@ Neste caso, o login do Windows `[DOMINIO\Usuario]` recebe permissão para execut
 * **Logins do Windows**: Sempre que possível, use logins do Windows, pois eles aproveitam a segurança e os controles de autenticação do sistema operacional.
 * **Auditoria**: É importante configurar auditoria de segurança para monitorar atividades de logins, como tentativas de login falhas e logins com privilégios elevados.
 
-## Imagem
 
 
-![Configuração Logins SQL Server](1.jpg)
+![Configuração Logins SQL Server](LoginsSQLServer.jpg)
 
 ## Conclusão
 

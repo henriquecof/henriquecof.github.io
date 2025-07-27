@@ -8,14 +8,17 @@ title = "Hugo Theme Stack Starter"
 defaultContentLanguage = "pt-br"
 [languages]
   [languages.de]
+    baseurl = "https://de.henriquecof.github.io/"
     contentDir = 'content/de'
     languageName = 'Deutsch'
     weight = 3
   [languages.en]
+    baseurl = "https://en.henriquecof.github.io/"
     contentDir = 'content/en'
     languageName = 'English'
     weight = 1
   [languages.fr]
+    baseurl = "https://fr.henriquecof.github.io/"
     contentDir = 'content/fr'
     languageName = 'Français'
     weight = 2
@@ -29,3 +32,5 @@ disqusShortname = "hugo-theme-stack"
 
 [pagination]
 pagerSize = 5
+
+translationKey = 'about'
