@@ -3,7 +3,8 @@ title: "Logins SQL Server"
 description: 
 slug: "Logins SQL Server"
 date: 2025-07-26T22:49:15-03:00
-image: LoginsSQLServer.jpg
+image: 1.jpg
+translationKey: 'about'
 math: 
 license: 
 hidden: false
@@ -108,7 +109,7 @@ Neste caso, o login do Windows `[DOMINIO\Usuario]` recebe permissão para execut
 
 
 
-![Configuração Logins SQL Server](LoginsSQLServer.jpg)
+![Configuração Logins SQL Server](1.jpg)
 
 ## Conclusão
 
