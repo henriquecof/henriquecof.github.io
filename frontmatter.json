@@ -42,6 +42,31 @@
           "title": "Categories",
           "name": "categories",
           "type": "categories"
+        },
+        {
+          "title": "image",
+          "name": "image",
+          "type": "image"
+        },
+        {
+          "title": "math",
+          "name": "math",
+          "type": "datetime"
+        },
+        {
+          "title": "license",
+          "name": "license",
+          "type": "datetime"
+        },
+        {
+          "title": "hidden",
+          "name": "hidden",
+          "type": "boolean"
+        },
+        {
+          "title": "comments",
+          "name": "comments",
+          "type": "boolean"
         }
       ]
     }
