@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SQL Server on Hugo Theme Stack Starter</title><link>https://henriquecof.github.io/fr/tags/sql-server/</link><description>Recent content in SQL Server on Hugo Theme Stack Starter</description><generator>Hugo -- gohugo.io</generator><language>fr</language><lastBuildDate>Sun, 27 Jul 2025 21:43:58 -0300</lastBuildDate><atom:link href="https://henriquecof.github.io/fr/tags/sql-server/index.xml" rel="self" type="application/rss+xml"/><item><title>Funcoes SQL Server</title><link>https://henriquecof.github.io/fr/p/funcoes-sql-server/</link><pubDate>Sun, 27 Jul 2025 21:43:58 -0300</pubDate><guid>https://henriquecof.github.io/fr/p/funcoes-sql-server/</guid><description>&lt;h1 id="desvendando-as-funções-no-sql-server-poder-e-boas-práticas">Desvendando as Funções no SQL Server: Poder e Boas Práticas!
+&lt;/h1>&lt;p>Olá, pessoal! Hoje vamos mergulhar no mundo das &lt;strong>funções no SQL Server&lt;/strong>. Elas são ferramentas incrivelmente poderosas para encapsular lógica e reutilizar código, mas, como tudo no SQL, exigem atenção para não virarem um gargalo de performance.&lt;/p>
+&lt;h2 id="o-que-são-funções-no-sql-server">O que são Funções no SQL Server?
+&lt;/h2>&lt;p>Uma função no SQL Server é um objeto de banco de dados que aceita parâmetros de entrada, executa um conjunto de ações (como consultas, cálculos, etc.) e retorna um único valor (escalar) ou uma tabela. Elas são similares a procedimentos armazenados, mas com uma diferença crucial: &lt;strong>funções podem ser usadas dentro de instruções &lt;code>SELECT&lt;/code>&lt;/strong>, &lt;code>WHERE&lt;/code>, &lt;code>HAVING&lt;/code>, e até mesmo dentro de outras funções, o que as torna extremamente versáteis.&lt;/p>
+&lt;p>Existem dois tipos principais de funções que podemos criar:&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>Funções Escalares (Scalar-valued Functions - T-SQL)&lt;/strong>: Retornam um único valor de qualquer tipo de dado.&lt;/li>
+&lt;li>&lt;strong>Funções com Valor de Tabela (Table-valued Functions - TVFs)&lt;/strong>: Retornam uma tabela. Podem ser de duas formas:
+&lt;ul>
+&lt;li>&lt;strong>Inline Table-valued Functions (iTVFs)&lt;/strong>: São mais simples e performáticas, pois essencialmente expandem a lógica da função diretamente na consulta chamadora, como uma view parametrizada.&lt;/li>
+&lt;li>&lt;strong>Multi-statement Table-valued Functions (mTVFs)&lt;/strong>: Permitem lógica mais complexa, incluindo múltiplos comandos T-SQL, mas podem ter um impacto significativo na performance devido a otimizações menos agressivas e, muitas vezes, a necessidade de materialização de dados.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="por-que-usar-funções">Por Que Usar Funções?
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>Reutilização de Código&lt;/strong>: Escreva a lógica uma vez e use-a em vários lugares.&lt;/li>
+&lt;li>&lt;strong>Modularização&lt;/strong>: Quebre problemas complexos em partes menores e mais gerenciáveis.&lt;/li>
+&lt;li>&lt;strong>Consistência&lt;/strong>: Garanta que uma lógica de negócio específica seja aplicada da mesma forma em todo o banco de dados.&lt;/li>
+&lt;li>&lt;strong>Manutenção Simplificada&lt;/strong>: Alterações na lógica precisam ser feitas em apenas um lugar.&lt;/li>
+&lt;/ul>
+&lt;h2 id="criando-funções-exemplos-e-boas-práticas">Criando Funções: Exemplos e Boas Práticas
+&lt;/h2>&lt;p>Vamos a alguns exemplos e, mais importante, às boas práticas!&lt;/p>
+&lt;h3 id="1-função-escalar-simples">1. Função Escalar Simples
+&lt;/h3>&lt;p>Imagine que você precisa calcular o valor total de um imposto sobre um preço.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FUNCTION&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CalcularImposto&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Preco&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">DECIMAL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">18&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">PercentualImposto&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">DECIMAL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">RETURNS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">DECIMAL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">18&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">BEGIN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">RETURN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Preco&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">PercentualImposto&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">END&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">GO&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- Exemplo de uso
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Produto&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">PrecoUnitario&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CalcularImposto&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">PrecoUnitario&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mi">00&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ValorImposto&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">PrecoUnitario&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CalcularImposto&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">PrecoUnitario&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mi">00&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PrecoTotal&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MinhaTabelaDeProdutos&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Dica de Performance&lt;/strong>: Funções escalares, especialmente as que realizam operações complexas ou acessam dados, podem levar a problemas de performance se chamadas para cada linha em grandes conjuntos de resultados (o temido &lt;strong>RBAR - Row By Agonizing Row&lt;/strong>). Pense se a lógica não poderia ser resolvida diretamente na sua consulta principal ou se uma iTVF seria mais adequada.&lt;/p>
+&lt;h3 id="2-função-com-valor-de-tabela-inline-tvf">2. Função com Valor de Tabela (Inline TVF)
+&lt;/h3>&lt;p>Se você precisa retornar um conjunto de resultados baseado em parâmetros, as iTVFs são suas melhores amigas para performance. Elas são tratadas pelo otimizador de consultas de forma muito eficiente.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FUNCTION&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ObterProdutosPorCategoria&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Categoria&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NVARCHAR&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">50&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">RETURNS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">TABLE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">RETURN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">NomeProduto&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Preco&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Produtos&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Categoria&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Categoria&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">GO&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- Exemplo de uso
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeProduto&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Preco&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ObterProdutosPorCategoria&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Eletrônicos&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Preco&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">500&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Por que iTVF é melhor que mTVF na maioria dos casos?&lt;/strong> O otimizador de consultas pode &amp;ldquo;inliner&amp;rdquo; (expandir) a lógica da iTVF diretamente na consulta chamadora, permitindo otimizações mais abrangentes e uso eficaz de índices. mTVFs, por outro lado, muitas vezes materializam seus resultados em um &lt;code>worktable&lt;/code>, o que pode impedir boas otimizações.&lt;/p>
+&lt;h3 id="3-função-com-valor-de-tabela-multi-statement-tvf---cuidado">3. Função com Valor de Tabela (Multi-statement TVF) - Cuidado!
+&lt;/h3>&lt;p>Embora úteis para lógica complexa que envolve múltiplas etapas ou variáveis, as mTVFs devem ser usadas com cautela devido ao seu potencial impacto na performance.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- CUIDADO: Este é um exemplo de mTVF, geralmente evite se uma iTVF for possível.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FUNCTION&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ObterRelatorioVendasMensal&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Ano&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">INT&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Mes&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">INT&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">RETURNS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Relatorio&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">TABLE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">INT&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">NomeProduto&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NVARCHAR&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">255&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">TotalVendas&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">DECIMAL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">18&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">MediaVendasDiaria&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">DECIMAL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">18&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">BEGIN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">INSERT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">INTO&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Relatorio&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NomeProduto&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">TotalVendas&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeProduto&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">SUM&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">iv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Quantidade&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">iv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PrecoUnitario&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Produtos&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">INNER&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">JOIN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ItensVenda&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">iv&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">iv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">INNER&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">JOIN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">Vendas&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">iv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VendaID&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VendaID&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">YEAR&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DataVenda&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Ano&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">AND&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">MONTH&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DataVenda&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Mes&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">GROUP&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">BY&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeProduto&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">UPDATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Relatorio&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">SET&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MediaVendasDiaria&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">TotalVendas&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">DAY&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">EOMONTH&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">CAST&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">CAST&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Ano&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">VARCHAR&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;-&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">CAST&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Mes&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">VARCHAR&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;-01&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">AS&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">DATE&lt;/span>&lt;span class="p">)));&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">RETURN&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">END&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">GO&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- Exemplo de uso
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ObterRelatorioVendasMensal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2023&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">7&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Quando usar mTVF?&lt;/strong> Somente quando a lógica é realmente complexa e não pode ser expressa de forma concisa em uma iTVF, e após considerar outras alternativas como views, CTEs ou procedures que retornam resultados.&lt;/p>
+&lt;h2 id="boas-práticas-essenciais">Boas Práticas Essenciais
+&lt;/h2>&lt;ol>
+&lt;li>&lt;strong>Evite Funções Escalares em Colunas de Grandes Tabelas em Cláusulas &lt;code>WHERE&lt;/code> ou &lt;code>JOIN&lt;/code>&lt;/strong>: Isso impede o uso de índices e força um scan na tabela. Por exemplo, &lt;code>WHERE dbo.MinhaFuncao(Coluna) = 'Valor'&lt;/code> é uma receita para problemas de performance.&lt;/li>
+&lt;li>&lt;strong>Prefira iTVFs a mTVFs&lt;/strong>: Sempre que possível, estruture sua lógica para se encaixar em uma Inline Table-valued Function para aproveitar as otimizações do SQL Server.&lt;/li>
+&lt;li>&lt;strong>Mantenha a Lógica Simples&lt;/strong>: Funções complexas demais podem se tornar difíceis de depurar e manter, além de potenciais problemas de performance.&lt;/li>
+&lt;li>&lt;strong>Use Schemas Adequados&lt;/strong>: Sempre prefixe suas funções com o schema apropriado (e.g., &lt;code>dbo.MinhaFuncao&lt;/code>).&lt;/li>
+&lt;li>&lt;strong>Entenda o Impacto na Otimização&lt;/strong>: Funções podem &amp;ldquo;esconder&amp;rdquo; a intenção do otimizador de consultas, levando a planos de execução subótimos. Use &lt;code>SET STATISTICS IO ON&lt;/code> e &lt;code>SET STATISTICS TIME ON&lt;/code>, e analise o plano de execução para entender o que está acontecendo.&lt;/li>
+&lt;li>&lt;strong>Teste, Teste, Teste!&lt;/strong>: Teste suas funções com diferentes volumes de dados e cenários para garantir que elas performem bem e retornem os resultados esperados.&lt;/li>
+&lt;/ol>
+&lt;p>As funções são uma parte fundamental do arsenal de qualquer desenvolvedor SQL Server. Usadas corretamente, elas podem aumentar drasticamente a eficiência e a manutenibilidade do seu código. Mas lembre-se: com grande poder vêm grandes responsabilidades de otimização!&lt;/p>
+&lt;p>Você já teve algum desafio interessante com funções no SQL Server? Compartilhe sua experiência nos comentários!&lt;/p></description></item><item><title>Linked Server</title><link>https://henriquecof.github.io/fr/p/linked-server/</link><pubDate>Sun, 27 Jul 2025 11:16:51 -0300</pubDate><guid>https://henriquecof.github.io/fr/p/linked-server/</guid><description>&lt;p>Olá, pessoal! Como um velho amigo do SQL Server, sei que muitas vezes nos deparamos com a necessidade de integrar dados que residem em servidores diferentes. É aí que o &lt;strong>Linked Server&lt;/strong> entra em cena, atuando como uma ponte robusta entre ambientes de dados distintos. Neste post, vamos mergulhar fundo no universo dos Linked Servers, desde sua configuração básica até dicas avançadas e solução de problemas. Prepare-se para desvendar todo o potencial dessa ferramenta!&lt;/p>
+&lt;hr>
+&lt;h2 id="o-que-é-um-linked-server-e-por-que-você-precisa-dele">O Que é um Linked Server e Por Que Você Precisa Dele?
+&lt;/h2>&lt;p>Imagine que você tem dados de vendas em um servidor e informações de clientes em outro. Ou talvez seu sistema principal esteja em um SQL Server mais antigo, mas você precisa puxar dados de um sistema financeiro que roda em uma instância mais recente, ou até mesmo em um Oracle, DB2 ou MySQL. O Linked Server é exatamente o que você precisa!&lt;/p>
+&lt;p>Em termos simples, um &lt;strong>Linked Server é uma configuração no SQL Server que permite que uma instância do SQL Server execute comandos em outra fonte de dados OLE DB&lt;/strong>. Essa fonte de dados pode ser outra instância do SQL Server (local ou remota), um Oracle, um MySQL, um DB2, e até mesmo um arquivo Excel ou CSV (sim, você leu certo!). Ele atua como um &amp;ldquo;atalho&amp;rdquo; para dados externos, tornando possível realizar consultas, atualizações e até mesmo criar objetos em servidores remotos, tudo a partir da sua instância local.&lt;/p>
+&lt;p>&lt;strong>Mas por que usar um Linked Server?&lt;/strong> As razões são inúmeras:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Integração de Dados:&lt;/strong> Unificar dados de diferentes fontes para relatórios, análises ou migrações.&lt;/li>
+&lt;li>&lt;strong>Consultas Distribuídas:&lt;/strong> Executar queries que abrangem múltiplos servidores sem a necessidade de transferir dados.&lt;/li>
+&lt;li>&lt;strong>Processos de ETL (Extract, Transform, Load):&lt;/strong> Facilitar a extração e carga de dados entre sistemas.&lt;/li>
+&lt;li>&lt;strong>Gerenciamento Centralizado:&lt;/strong> Acessar dados de diferentes ambientes a partir de uma única interface.&lt;/li>
+&lt;li>&lt;strong>Minimizar o Tráfego de Rede:&lt;/strong> Em alguns cenários, pode ser mais eficiente consultar os dados no servidor de origem do que transferir grandes volumes.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="mãos-à-obra-configurando-um-linked-server">Mãos à Obra: Configurando um Linked Server
+&lt;/h2>&lt;p>A configuração de um Linked Server pode parecer um bicho de sete cabeças à primeira vista, mas garanto que é mais simples do que parece. Vamos ver o passo a passo, tanto via SQL Server Management Studio (SSMS) quanto via T-SQL.&lt;/p>
+&lt;h3 id="via-sql-server-management-studio-ssms">Via SQL Server Management Studio (SSMS)
+&lt;/h3>&lt;p>Esta é a forma mais visual e intuitiva para quem está começando:&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>Conecte-se ao SSMS:&lt;/strong> Abra o SQL Server Management Studio e conecte-se à instância onde você deseja criar o Linked Server.&lt;/li>
+&lt;li>&lt;strong>Navegue até &amp;ldquo;Server Objects&amp;rdquo;:&lt;/strong> No Object Explorer, expanda &amp;ldquo;Server Objects&amp;rdquo;.&lt;/li>
+&lt;li>&lt;strong>Expanda &amp;ldquo;Linked Servers&amp;rdquo;:&lt;/strong> Dentro de &amp;ldquo;Server Objects&amp;rdquo;, expanda &amp;ldquo;Linked Servers&amp;rdquo;.&lt;/li>
+&lt;li>&lt;strong>Novo Linked Server:&lt;/strong> Clique com o botão direito em &amp;ldquo;Linked Servers&amp;rdquo; e selecione &amp;ldquo;New Linked Server&amp;hellip;&amp;rdquo;.&lt;/li>
+&lt;li>&lt;strong>Preencha as Informações:&lt;/strong> Uma nova janela &amp;ldquo;New Linked Server&amp;rdquo; será aberta. Aqui é onde a mágica acontece.
+&lt;ul>
+&lt;li>&lt;strong>General Page:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Linked server:&lt;/strong> Dê um nome significativo ao seu Linked Server. Este será o nome que você usará nas suas consultas (ex: &lt;code>MEU_SERVER_REMOTO&lt;/code>).&lt;/li>
+&lt;li>&lt;strong>Server type:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>SQL Server:&lt;/strong> Se você está se conectando a outra instância do SQL Server, selecione esta opção.&lt;/li>
+&lt;li>&lt;strong>Other data source:&lt;/strong> Para outras fontes de dados (Oracle, MySQL, Excel, etc.), selecione esta e escolha o provedor OLE DB apropriado. Para SQL Server, esta opção é mais genérica e permite especificar o provedor e a string de conexão manualmente.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Product name:&lt;/strong> Para SQL Server, geralmente preenchemos com &amp;ldquo;SQL Server&amp;rdquo;. Para outros, o nome do produto (ex: &amp;ldquo;Oracle&amp;rdquo;).&lt;/li>
+&lt;li>&lt;strong>Data source:&lt;/strong> O nome ou endereço IP do servidor remoto. Se for uma instância nomeada (ex: &lt;code>SEUSQL\INSTANCIA&lt;/code>), use &lt;code>SEUSQL\INSTANCIA&lt;/code>.&lt;/li>
+&lt;li>&lt;strong>Provider string:&lt;/strong> Deixe em branco se for SQL Server padrão. Para outros provedores, pode ser necessário especificar parâmetros de conexão adicionais.&lt;/li>
+&lt;li>&lt;strong>Catalog:&lt;/strong> O nome do banco de dados padrão no servidor remoto para este Linked Server. Opcional, mas útil.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Security Page:&lt;/strong> Esta é crucial para a autenticação.
+&lt;ul>
+&lt;li>&lt;strong>Not be made:&lt;/strong> Sem contexto de segurança. Não recomendado para a maioria dos cenários.&lt;/li>
+&lt;li>&lt;strong>Be made using the login&amp;rsquo;s current security context:&lt;/strong> A autenticação é feita usando as credenciais do usuário que está executando a consulta no servidor local. Útil em ambientes de domínio com autenticação Windows integrada.&lt;/li>
+&lt;li>&lt;strong>Be made using a security context that the login&amp;rsquo;s current security context does not support:&lt;/strong> Para usuários que não são mapeados.&lt;/li>
+&lt;li>&lt;strong>Be made using this security context:&lt;/strong> Esta é a opção mais comum e flexível. Você especifica um &lt;strong>login remoto&lt;/strong> (usuário e senha) que será usado para acessar o servidor vinculado.
+&lt;ul>
+&lt;li>&lt;strong>Remote login:&lt;/strong> O nome de usuário no servidor remoto.&lt;/li>
+&lt;li>&lt;strong>With password:&lt;/strong> A senha para o usuário remoto.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Add:&lt;/strong> Mapear logins específicos do servidor local para logins específicos do servidor remoto. Muito útil para granularidade de segurança.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Server Options Page:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;strong>Collation Compatible:&lt;/strong> Se os servidores tiverem diferentes configurações de collation e você precisa que o Linked Server trate isso.&lt;/li>
+&lt;li>&lt;strong>Data Access:&lt;/strong> Habilita ou desabilita o acesso a dados.&lt;/li>
+&lt;li>&lt;strong>RPC, RPC Out:&lt;/strong> Permite chamadas de procedimento remoto. Essencial para executar stored procedures remotas.&lt;/li>
+&lt;li>&lt;strong>Use Remote Collation:&lt;/strong> Usa a collation do servidor remoto.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Clique em OK:&lt;/strong> Seu Linked Server está pronto!&lt;/li>
+&lt;/ol>
+&lt;h3 id="via-t-sql-transact-sql">Via T-SQL (Transact-SQL)
+&lt;/h3>&lt;p>Para quem prefere a automação e o controle total, o T-SQL é o caminho. A sintaxe básica é a seguinte:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">EXEC&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sp_addlinkedserver&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">server&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;MEU_SERVER_REMOTO&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Nome do Linked Server
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">srvproduct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;SQL Server&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Produto do servidor remoto (ex: &amp;#39;SQL Server&amp;#39;, &amp;#39;Oracle&amp;#39;)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">provider&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;SQLNCLI11&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Provedor OLE DB (SQLNCLI11 para SQL Server 2012 e superior, SQLOLEDB para versões mais antigas)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">datasrc&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;NOME_OU_IP_DO_SERVER_REMOTO\INSTANCIA_REMOTO&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Fonte de dados (nome do servidor ou IP, com instância se aplicável)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">EXEC&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sp_addlinkedsrvlogin&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">rmtsrvname&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;MEU_SERVER_REMOTO&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Nome do Linked Server
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">useself&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;FALSE&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- &amp;#39;TRUE&amp;#39; para usar contexto de segurança atual, &amp;#39;FALSE&amp;#39; para especificar login
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">locallogin&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Login local (NULL para todos os logins locais)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">rmtuser&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;usuario_remoto&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Login remoto
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">rmtpassword&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;sua_senha_secreta&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- Senha do login remoto
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>Observações importantes:&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>@provider&lt;/code>: Para SQL Server, &lt;code>SQLNCLI11&lt;/code> é o provedor recomendado para SQL Server 2012 e versões posteriores. Para versões mais antigas (até SQL Server 2008 R2), &lt;code>SQLOLEDB&lt;/code> era o padrão. Certifique-se de ter o provedor instalado e registrado.&lt;/li>
+&lt;li>&lt;code>@locallogin&lt;/code>: Se você deseja que apenas um login específico no seu servidor local possa usar esse Linked Server, substitua &lt;code>NULL&lt;/code> pelo nome do login local. Caso contrário, &lt;code>NULL&lt;/code> permite que qualquer login local use o mapeamento.&lt;/li>
+&lt;li>&lt;code>sp_addlinkedsrvlogin&lt;/code>: Você pode usar &lt;code>sp_addlinkedsrvlogin&lt;/code> múltiplas vezes para mapear diferentes logins locais para diferentes logins remotos, ou para mapear logins locais para o contexto de segurança atual (&lt;code>@useself = 'TRUE'&lt;/code>).&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="testando-e-usando-seu-linked-server">Testando e Usando Seu Linked Server
+&lt;/h2>&lt;p>Depois de configurar, é hora de testar!&lt;/p>
+&lt;h3 id="consultando-dados">Consultando Dados
+&lt;/h3>&lt;p>A forma mais comum de usar um Linked Server é através de &lt;strong>consultas de quatro partes&lt;/strong>:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">SELECT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MEU_SERVER_REMOTO&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeDoBancoDeDados&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeDoSchema&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeDaTabela&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- Exemplo real:
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">c&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeCliente&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeProduto&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MEU_SERVER_REMOTO&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VendasDB&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Clientes&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">c&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">INNER&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">JOIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">SEGUNDO_SERVER&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EstoqueDB&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Produtos&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">c&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">p&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ProdutoID&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Você também pode usar a função &lt;code>OPENQUERY&lt;/code> para consultas mais complexas ou para otimizar o desempenho, pois ela envia a consulta diretamente para o servidor remoto para ser executada lá, e não no servidor local.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">SELECT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OPENQUERY&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MEU_SERVER_REMOTO&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;SELECT ClienteID, NomeCliente FROM VendasDB.dbo.Clientes WHERE DataRegistro &amp;gt; GETDATE() - 30&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>A função &lt;code>OPENDATASOURCE&lt;/code> é similar, mas permite especificar a fonte de dados ad-hoc, sem a necessidade de um Linked Server pré-configurado. Use com cautela, pois ela é menos segura e mais verbosa.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">SELECT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">OPENDATASOURCE&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;SQLNCLI11&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Data Source=NOME_OU_IP_DO_SERVER_REMOTO\INSTANCIA_REMOTO;Initial Catalog=VendasDB;User ID=usuario_remoto;Password=sua_senha_secreta&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VendasDB&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Clientes&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="executando-stored-procedures-remotas">Executando Stored Procedures Remotas
+&lt;/h3>&lt;p>Sim, você pode! Isso é incrivelmente útil para orquestrar processos em diferentes servidores.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">EXEC&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MEU_SERVER_REMOTO&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NomeDoBancoDeDados&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MinhaStoredProcedureRemota&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">@&lt;/span>&lt;span class="n">Parametro1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Valor&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="gerenciando-e-solucionando-problemas-comuns">Gerenciando e Solucionando Problemas Comuns
+&lt;/h2>&lt;p>Mesmo os especialistas em SQL Server enfrentam desafios com Linked Servers. Aqui estão alguns pontos importantes e dicas de troubleshooting:&lt;/p>
+&lt;h3 id="segurança">Segurança
+&lt;/h3>&lt;p>A segurança é primordial.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Princípio do Mínimo Privilégio:&lt;/strong> Conceda apenas as permissões necessárias ao login remoto. Não use &lt;code>sa&lt;/code> ou contas com privilégios excessivos.&lt;/li>
+&lt;li>&lt;strong>Autenticação Windows vs. SQL Server:&lt;/strong> A autenticação Windows é mais segura, especialmente em ambientes de domínio. Se usar autenticação SQL Server, garanta senhas fortes e rotação regular.&lt;/li>
+&lt;li>&lt;strong>Mapeamento de Logins:&lt;/strong> Use &lt;code>sp_addlinkedsrvlogin&lt;/code> para mapear logins locais para logins remotos específicos, aumentando a granularidade de segurança.&lt;/li>
+&lt;/ul>
+&lt;h3 id="desempenho">Desempenho
+&lt;/h3>&lt;p>Consultas em Linked Servers podem ser mais lentas devido à latência de rede e ao otimizador de consultas.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>OPENQUERY:&lt;/strong> Sempre que possível, use &lt;code>OPENQUERY&lt;/code>. Ele &amp;ldquo;empurra&amp;rdquo; a consulta para o servidor remoto, minimizando o tráfego de rede e aproveitando o otimizador de consultas do servidor de origem.&lt;/li>
+&lt;li>&lt;strong>Índices:&lt;/strong> Certifique-se de que as tabelas no servidor remoto que você está consultando tenham índices apropriados.&lt;/li>
+&lt;li>&lt;strong>Consultas Simples:&lt;/strong> Evite consultas complexas ou JOINs massivos entre servidores, se puder. Puxe apenas os dados necessários.&lt;/li>
+&lt;li>&lt;strong>Transferência de Dados:&lt;/strong> Para grandes volumes de dados, considere a replicação, SSIS ou outras ferramentas de ETL em vez de consultas diretas com Linked Server.&lt;/li>
+&lt;/ul>
+&lt;h3 id="troubleshooting-comum">Troubleshooting Comum
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>&amp;ldquo;Login failed for user&amp;hellip;&amp;rdquo;&lt;/strong>: O erro mais comum. Verifique o nome de usuário e a senha configurados no &lt;code>sp_addlinkedsrvlogin&lt;/code> (ou na aba Security do SSMS). Certifique-se de que o usuário remoto tenha permissão para acessar o banco de dados e as tabelas necessárias.&lt;/li>
+&lt;li>&lt;strong>&amp;ldquo;OLE DB provider &amp;lsquo;SQLNCLI11&amp;rsquo; for linked server &amp;lsquo;&amp;hellip;&amp;rsquo; returned message &amp;lsquo;No process is on the other end of the pipe.&amp;rsquo;&amp;rdquo;&lt;/strong>: Geralmente indica um problema de conectividade de rede (firewall bloqueando porta 1433), o serviço do SQL Server no servidor remoto está parado, ou o nome do servidor/instância está incorreto.&lt;/li>
+&lt;li>&lt;strong>&amp;ldquo;The OLE DB provider &amp;lsquo;SQLNCLI11&amp;rsquo; for linked server &amp;lsquo;&amp;hellip;&amp;rsquo; reported an error. Access denied.&amp;rdquo;&lt;/strong>: O usuário remoto tem acesso ao servidor, mas não tem permissão para a ação específica (SELECT, INSERT, UPDATE, DELETE) na tabela/view que você está tentando acessar.&lt;/li>
+&lt;li>&lt;strong>&amp;ldquo;Cannot initialize the data source object of OLE DB provider &amp;lsquo;&amp;hellip;&amp;rsquo; for linked server &amp;lsquo;&amp;hellip;&amp;rsquo;&amp;rdquo;:&lt;/strong> Problema com o provedor OLE DB. Ele pode não estar instalado, registrado corretamente, ou a string de conexão está incorreta.&lt;/li>
+&lt;li>&lt;strong>Timeout Errors:&lt;/strong> Consultas que demoram muito para responder podem ser interrompidas por timeouts. Ajuste as configurações de timeout do Linked Server nas opções do servidor (Server Options -&amp;gt; Connection Timeout, Query Timeout) ou via &lt;code>sp_serveroption&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;h3 id="excluindo-um-linked-server">Excluindo um Linked Server
+&lt;/h3>&lt;p>Se você precisar remover um Linked Server:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">EXEC&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">sp_dropserver&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;MEU_SERVER_REMOTO&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;droplogins&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>O argumento &lt;code>'droplogins'&lt;/code> garante que os mapeamentos de login associados também sejam removidos.&lt;/p>
+&lt;hr>
+&lt;h2 id="considerações-finais-e-próximos-passos">Considerações Finais e Próximos Passos
+&lt;/h2>&lt;p>O Linked Server é uma ferramenta incrivelmente poderosa e versátil no arsenal de qualquer DBA ou desenvolvedor SQL Server. Com ele, você pode criar soluções robustas para integração de dados, consolidar informações e otimizar processos de negócios.&lt;/p>
+&lt;p>No entanto, como qualquer ferramenta poderosa, o Linked Server requer compreensão e bom senso. Não o use para tudo! Avalie sempre as necessidades do seu projeto:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Para consultas ad-hoc rápidas entre servidores:&lt;/strong> O Linked Server é perfeito.&lt;/li>
+&lt;li>&lt;strong>Para integração de dados em larga escala ou processos de ETL complexos:&lt;/strong> Considere ferramentas como SQL Server Integration Services (SSIS), Azure Data Factory, ou outras soluções de orquestração de dados.&lt;/li>
+&lt;li>&lt;strong>Para manter cópias de dados sincronizadas:&lt;/strong> A Replicação do SQL Server ou Always On Availability Groups podem ser mais apropriadas.&lt;/li>
+&lt;/ul>
+&lt;p>Espero que este guia detalhado tenha desmistificado o Linked Server para você. Ele é um excelente recurso para conectar mundos de dados e expandir as capacidades do seu ambiente SQL Server.&lt;/p>
+&lt;p>Se você tiver alguma dúvida, sugestão ou quiser compartilhar suas experiências com Linked Servers, deixe um comentário abaixo! Adoraria saber como vocês estão usando essa ferramenta em seus projetos.&lt;/p>
+&lt;p>Até a próxima, e bons códigos!&lt;/p></description></item><item><title>Logins SQL Server</title><link>https://henriquecof.github.io/fr/p/logins-sql-server/</link><pubDate>Sat, 26 Jul 2025 22:49:15 -0300</pubDate><guid>https://henriquecof.github.io/fr/p/logins-sql-server/</guid><description>&lt;img src="https://henriquecof.github.io/p/logins-sql-server/1.jpg" alt="Featured image of post Logins SQL Server" />&lt;h1 id="configuração-de-logins-no-sql-server">Configuração de Logins no SQL Server
+&lt;/h1>&lt;h2 id="introdução">Introdução
+&lt;/h2>&lt;p>A configuração de logins no SQL Server é uma das tarefas essenciais para garantir que o acesso ao banco de dados seja controlado adequadamente. Existem dois tipos principais de logins no SQL Server: logins do SQL Server e logins do Windows. Neste post, vamos explorar como configurar ambos os tipos de logins e discutir práticas recomendadas para gerenciar o acesso de usuários.&lt;/p>
+&lt;h2 id="1-criando-logins-no-sql-server">1. Criando Logins no SQL Server
+&lt;/h2>&lt;p>No SQL Server, você pode criar logins através do Management Studio ou via T-SQL. Vamos começar com um exemplo básico de como criar um login de SQL Server:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">WITH&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PASSWORD&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;SenhaSegura123&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Este comando cria um login com o nome &lt;code>NovoUsuario&lt;/code> e uma senha associada. Após a criação, você precisa conceder permissões para esse login. Isso é feito associando-o a uma conta de usuário dentro de um banco de dados específico.&lt;/p>
+&lt;h3 id="exemplo-de-criação-de-login-com-configuração-de-senha-expirada">Exemplo de criação de login com configuração de senha expirada:
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">WITH&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PASSWORD&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;SenhaSegura123&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">CHECK_POLICY&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">CHECK_EXPIRATION&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Neste exemplo, a política de senha e a expiração de senha são habilitadas, forçando o usuário a alterar a senha após o prazo determinado.&lt;/p>
+&lt;h2 id="2-criando-logins-do-windows">2. Criando Logins do Windows
+&lt;/h2>&lt;p>Você também pode criar logins baseados no Windows, permitindo que os usuários acessem o banco de dados utilizando suas credenciais do sistema operacional:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">WINDOWS&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Neste caso, o login é criado utilizando a conta do Windows &lt;code>DOMINIO\Usuario&lt;/code>.&lt;/p>
+&lt;h3 id="logins-do-windows-vs-sql-server">Logins do Windows vs SQL Server
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Logins do SQL Server&lt;/strong>: São úteis em cenários onde os usuários não fazem parte de um domínio ou quando você precisa de autenticação exclusiva no SQL Server.&lt;/li>
+&lt;li>&lt;strong>Logins do Windows&lt;/strong>: São recomendados quando a segurança do domínio e a administração de contas de usuários já estão sendo feitas no nível do sistema operacional.&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-associando-logins-aos-bancos-de-dados">3. Associando Logins aos Bancos de Dados
+&lt;/h2>&lt;p>Depois de criar o login, o próximo passo é associá-lo a um banco de dados. Isso é feito criando um usuário no banco de dados para o login:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="n">USE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MeuBancoDeDados&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">USER&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FOR&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>O comando acima cria um usuário no banco de dados &lt;code>MeuBancoDeDados&lt;/code> associado ao login &lt;code>NovoUsuario&lt;/code>.&lt;/p>
+&lt;h3 id="exemplo-de-associação-de-login-do-windows">Exemplo de associação de login do Windows:
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="n">USE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MeuBancoDeDados&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">USER&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FOR&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">LOGIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">];&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="4-concedendo-permissões">4. Concedendo Permissões
+&lt;/h2>&lt;p>Após associar o login ao banco de dados, você deve conceder as permissões necessárias. Por exemplo, para conceder permissões de leitura e gravação:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">GRANT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">INSERT&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">UPDATE&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">DELETE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">SCHEMA&lt;/span>&lt;span class="p">::&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">TO&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">NovoUsuario&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Isso permite que o usuário &lt;code>NovoUsuario&lt;/code> tenha permissões de leitura e escrita em todas as tabelas dentro do esquema &lt;code>dbo&lt;/code>.&lt;/p>
+&lt;h3 id="exemplo-de-concessão-de-permissões-a-logins-de-windows">Exemplo de concessão de permissões a logins de Windows:
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">GRANT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">EXECUTE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">SCHEMA&lt;/span>&lt;span class="p">::&lt;/span>&lt;span class="n">dbo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">TO&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">DOMINIO&lt;/span>&lt;span class="err">\&lt;/span>&lt;span class="n">Usuario&lt;/span>&lt;span class="p">];&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Neste caso, o login do Windows &lt;code>[DOMINIO\Usuario]&lt;/code> recebe permissão para executar stored procedures no esquema &lt;code>dbo&lt;/code>.&lt;/p>
+&lt;h2 id="5-considerações-de-segurança">5. Considerações de Segurança
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>Senhas fortes&lt;/strong>: Sempre utilize senhas fortes para logins do SQL Server. Senhas fracas são um dos principais vetores de ataque.&lt;/li>
+&lt;li>&lt;strong>Privilégios mínimos&lt;/strong>: Evite usar logins com permissões administrativas, a menos que absolutamente necessário. Utilize o princípio do &amp;ldquo;menor privilégio&amp;rdquo;.&lt;/li>
+&lt;li>&lt;strong>Logins do Windows&lt;/strong>: Sempre que possível, use logins do Windows, pois eles aproveitam a segurança e os controles de autenticação do sistema operacional.&lt;/li>
+&lt;li>&lt;strong>Auditoria&lt;/strong>: É importante configurar auditoria de segurança para monitorar atividades de logins, como tentativas de login falhas e logins com privilégios elevados.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://henriquecof.github.io/p/logins-sql-server/1.jpg"
+width="705"
+height="634"
+srcset="https://henriquecof.github.io/p/logins-sql-server/1_hu_d822462eef30d608.jpg 480w, https://henriquecof.github.io/p/logins-sql-server/1_hu_3a4b96745022e00c.jpg 1024w"
+loading="lazy"
+alt="Configuração Logins SQL Server"
+class="gallery-image"
+data-flex-grow="111"
+data-flex-basis="266px"
+>&lt;/p>
+&lt;h2 id="conclusão">Conclusão
+&lt;/h2>&lt;p>A configuração de logins no SQL Server é uma tarefa fundamental para garantir a segurança e o controle de acesso aos dados. Ao criar logins adequados e aplicar as melhores práticas de segurança, como senhas fortes e permissões mínimas, você estará protegendo seu ambiente de banco de dados contra acessos não autorizados. Além disso, é importante revisar regularmente as permissões e garantir que os logins sejam mantidos atualizados e em conformidade com as políticas de segurança da organização.&lt;/p></description></item></channel></rss>
