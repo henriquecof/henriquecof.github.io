@@ -2,11 +2,11 @@
 [en]
 languageName = "English"
 languagedirection = "ltr"
-title = "Example Site"
+title = "Henrique Almeida"
 weight = 1
 
 [pt-br]
 languageName = "Portugues - Brazil"
 languagedirection = "ltr"
-title = "Exemplo Site"
+title = "Henrique Almeida"
 weight = 1
