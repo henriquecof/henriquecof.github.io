@@ -67,6 +67,16 @@
           "title": "comments",
           "name": "comments",
           "type": "boolean"
+        },
+        {
+          "title": "weight",
+          "name": "weight",
+          "type": "number"
+        },
+        {
+          "title": "fmContentType",
+          "name": "fmContentType",
+          "type": "string"
         }
       ]
     }
